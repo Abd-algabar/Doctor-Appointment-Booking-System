@@ -1,0 +1,459 @@
+const medicalRecords = [
+  {
+    symptoms: [
+      "Frequent urination",
+      "Increased thirst",
+      "Fatigue",
+      "Blurred vision",
+      "Weight loss",
+      "Slow wound healing"
+    ],
+    chronicIllnesses: [
+      "Type 2 Diabetes (diagnosed 2020)",
+      "Hypertension (diagnosed 2019)",
+      "Hyperlipidemia"
+    ],
+    previousSurgeries: [
+      "Appendectomy (2010)",
+      "Hernia repair (2015)",
+      "Cataract surgery (2022)"
+    ],
+    diagnosis: "Type 2 Diabetes Mellitus with poor glycemic control",
+    treatment: [
+      "Metformin 850mg twice daily with meals",
+      "Gliclazide 40mg daily",
+      "Low carbohydrate diet (45-60g per meal)",
+      "Daily exercise: 30 minutes walking",
+      "Blood glucose monitoring 4 times daily",
+      "Follow up in 2 weeks"
+    ]
+  },
+  {
+    symptoms: [
+      "Chest pain (left side)",
+      "Shortness of breath on exertion",
+      "Palpitations",
+      "Fatigue",
+      "Lightheadedness",
+      "Swelling in ankles"
+    ],
+    chronicIllnesses: [
+      "Essential Hypertension (diagnosed 2018)",
+      "Hyperlipidemia (diagnosed 2019)",
+      "Atrial fibrillation"
+    ],
+    previousSurgeries: [
+      "Cesarean section (2010)",
+      "Cholecystectomy (2018)",
+      "Knee arthroscopy (2020)"
+    ],
+    diagnosis: "Hypertensive heart failure with atrial fibrillation",
+    treatment: [
+      "Furosemide 40mg daily in morning",
+      "Metoprolol 25mg twice daily",
+      "Losartan 100mg daily",
+      "Strict sodium restriction (<2g daily)",
+      "Fluid restriction: 1.5L daily",
+      "Daily weight monitoring",
+      "Cardiology follow-up in 1 week"
+    ]
+  },
+  {
+    symptoms: [
+      "Throbbing headache (right temple)",
+      "Visual aura (flashing lights)",
+      "Nausea and vomiting",
+      "Photophobia",
+      "Phonophobia",
+      "Neck stiffness"
+    ],
+    chronicIllnesses: [
+      "Migraine with aura (diagnosed 2005)",
+      "Hyperthyroidism (diagnosed 2019)",
+      "Anxiety disorder"
+    ],
+    previousSurgeries: [
+      "Tonsillectomy (1995)",
+      "Appendectomy (2008)",
+      "Dental implant surgery (2021)"
+    ],
+    diagnosis: "Status migrainosus, Migraine with aura",
+    treatment: [
+      "Sumatriptan 6mg subcutaneous for acute attack",
+      "Metoclopramide 10mg IV for nausea",
+      "Propranolol 40mg twice daily for prophylaxis",
+      "Identify and avoid trigger factors",
+      "Regular sleep schedule",
+      "Stress management techniques",
+      "Hydration: 2L water daily",
+      "Follow up in 2 weeks"
+    ]
+  },
+  {
+    symptoms: [
+      "Cramping abdominal pain",
+      "Watery diarrhea (8-10 times daily)",
+      "Blood in stool",
+      "Fever (38.5°C)",
+      "Fatigue",
+      "Weight loss",
+      "Loss of appetite"
+    ],
+    chronicIllnesses: [
+      "Crohn's Disease (diagnosed 2020)",
+      "Iron deficiency anemia",
+      "Osteoporosis"
+    ],
+    previousSurgeries: [
+      "Appendectomy (2015)",
+      "Small bowel resection (2021)",
+      "Hemorrhoidectomy (2022)"
+    ],
+    diagnosis: "Crohn's disease flare-up with possible infectious colitis",
+    treatment: [
+      "Prednisone 40mg daily for 2 weeks then taper",
+      "Metronidazole 500mg three times daily for 10 days",
+      "Low residue diet during flare",
+      "Adequate hydration with oral rehydration solution",
+      "Avoid NSAIDs",
+      "Stress reduction techniques",
+      "Follow up in 2 weeks"
+    ]
+  },
+  {
+    symptoms: [
+      "Short-term memory loss",
+      "Difficulty finding words",
+      "Getting lost in familiar places",
+      "Personality changes",
+      "Poor judgment",
+      "Difficulty with complex tasks"
+    ],
+    chronicIllnesses: [
+      "Hypertension (diagnosed 2010)",
+      "Type 2 Diabetes (diagnosed 2015)",
+      "Depression"
+    ],
+    previousSurgeries: [
+      "Prostate surgery (2018)",
+      "Cataract surgery (2020)",
+      "Hip replacement (2021)"
+    ],
+    diagnosis: "Probable Alzheimer's Dementia, Mild stage",
+    treatment: [
+      "Donepezil 5mg daily at bedtime",
+      "Memantine 5mg daily, increase to 10mg after 4 weeks",
+      "Regular cognitive stimulation activities",
+      "Safety measures at home",
+      "Caregiver support and education",
+      "Neurology follow-up in 1 month"
+    ]
+  },
+  {
+    symptoms: [
+      "Wheezing",
+      "Chest tightness",
+      "Shortness of breath",
+      "Coughing at night",
+      "Difficulty sleeping",
+      "Reduced exercise tolerance"
+    ],
+    chronicIllnesses: [
+      "Bronchial Asthma (diagnosed 2010)",
+      "Allergic rhinitis",
+      "Eczema"
+    ],
+    previousSurgeries: [
+      "Tonsillectomy (2001)",
+      "Sinus surgery (2015)",
+      "Emergency appendectomy (2018)"
+    ],
+    diagnosis: "Asthma exacerbation, Moderate persistent",
+    treatment: [
+      "Salbutamol inhaler 2 puffs every 4 hours as needed",
+      "Fluticasone inhaler 250mcg twice daily",
+      "Montelukast 10mg daily at bedtime",
+      "Avoid known allergens (dust, pollen, pet dander)",
+      "Use inhaler 15 minutes before exercise",
+      "Keep rescue inhaler accessible at all times",
+      "Follow up in 2 weeks"
+    ]
+  },
+  {
+    symptoms: [
+      "Joint pain (knees, hands)",
+      "Morning stiffness (>1 hour)",
+      "Joint swelling",
+      "Fatigue",
+      "Low-grade fever",
+      "Reduced grip strength"
+    ],
+    chronicIllnesses: [
+      "Rheumatoid Arthritis (diagnosed 2018)",
+      "Osteoporosis",
+      "Sjogren's Syndrome"
+    ],
+    previousSurgeries: [
+      "Carpal tunnel release (2019)",
+      "Knee arthroscopy (2020)",
+      "Dental extractions (multiple)"
+    ],
+    diagnosis: "Rheumatoid Arthritis flare, Active disease",
+    treatment: [
+      "Methotrexate 15mg weekly",
+      "Folic acid 5mg weekly",
+      "Prednisone 10mg daily for 2 weeks then taper",
+      "Physical therapy referral",
+      "Joint protection techniques",
+      "Regular gentle exercise",
+      "Rheumatology follow-up in 4 weeks"
+    ]
+  },
+  {
+    symptoms: [
+      "Heartburn",
+      "Regurgitation",
+      "Chest pain",
+      "Difficulty swallowing",
+      "Chronic cough",
+      "Sore throat"
+    ],
+    chronicIllnesses: [
+      "Gastroesophageal Reflux Disease (diagnosed 2017)",
+      "Hiatal hernia",
+      "Barrett's Esophagus"
+    ],
+    previousSurgeries: [
+      "Cholecystectomy (2015)",
+      "Hernia repair (2019)",
+      "Endoscopic procedure for Barrett's (2022)"
+    ],
+    diagnosis: "GERD exacerbation with possible esophagitis",
+    treatment: [
+      "Omeprazole 40mg daily before breakfast",
+      "Elevate head of bed 6-8 inches",
+      "Avoid meals 3 hours before bedtime",
+      "Small, frequent meals",
+      "Avoid trigger foods (spicy, fatty, acidic)",
+      "Weight loss if overweight",
+      "Gastroenterology follow-up in 3 months"
+    ]
+  },
+  {
+    symptoms: [
+      "Severe lower back pain",
+      "Radiating pain to left leg",
+      "Numbness in foot",
+      "Weakness in leg",
+      "Difficulty walking",
+      "Bladder urgency"
+    ],
+    chronicIllnesses: [
+      "Degenerative disc disease",
+      "Osteoarthritis",
+      "Obesity"
+    ],
+    previousSurgeries: [
+      "Lumbar laminectomy (2018)",
+      "Knee replacement (2020)",
+      "Gallbladder removal (2015)"
+    ],
+    diagnosis: "Acute lumbar radiculopathy, L5-S1",
+    treatment: [
+      "Naproxen 500mg twice daily with food",
+      "Gabapentin 300mg three times daily",
+      "Cyclobenzaprine 10mg at bedtime as needed",
+      "Physical therapy starting next week",
+      "Heat/cold therapy",
+      "Proper lifting techniques",
+      "Weight management",
+      "Neurosurgery consultation if not improved in 2 weeks"
+    ]
+  },
+  {
+    symptoms: [
+      "Excessive worry",
+      "Restlessness",
+      "Fatigue",
+      "Difficulty concentrating",
+      "Sleep problems",
+      "Muscle tension",
+      "Irritability"
+    ],
+    chronicIllnesses: [
+      "Generalized Anxiety Disorder (diagnosed 2019)",
+      "Major Depressive Disorder",
+      "Irritable Bowel Syndrome"
+    ],
+    previousSurgeries: [
+      "Appendectomy (2012)",
+      "Wisdom teeth removal (2015)",
+      "Minor hand surgery (2020)"
+    ],
+    diagnosis: "Generalized Anxiety Disorder exacerbation",
+    treatment: [
+      "Sertraline 50mg daily, increase to 100mg after 1 week",
+      "Cognitive behavioral therapy weekly",
+      "Relaxation techniques daily",
+      "Regular exercise program",
+      "Sleep hygiene improvement",
+      "Limit caffeine and alcohol",
+      "Psychiatry follow-up in 4 weeks"
+    ]
+  },
+  {
+    symptoms: [
+      "Frequent urination",
+      "Urgency",
+      "Pelvic pain",
+      "Cloudy urine",
+      "Low-grade fever",
+      "Malaise"
+    ],
+    chronicIllnesses: [
+      "Recurrent urinary tract infections",
+      "Kidney stones",
+      "Type 1 Diabetes"
+    ],
+    previousSurgeries: [
+      "Kidney stone removal (2019)",
+      "Appendectomy (2014)",
+      "Cesarean section (2021)"
+    ],
+    diagnosis: "Acute pyelonephritis, Complicated UTI",
+    treatment: [
+      "Ciprofloxacin 500mg twice daily for 14 days",
+      "Phenazopyridine 200mg three times daily for 3 days",
+      "Increased fluid intake (>2L daily)",
+      "Complete full course of antibiotics",
+      "Urine culture follow-up",
+      "Urology referral for recurrent infections",
+      "Return if fever persists or worsens"
+    ]
+  },
+  {
+    symptoms: [
+      "Shortness of breath",
+      "Cough with pink frothy sputum",
+      "Extreme fatigue",
+      "Swelling in legs and abdomen",
+      "Rapid weight gain",
+      "Difficulty lying flat"
+    ],
+    chronicIllnesses: [
+      "Congestive Heart Failure (diagnosed 2020)",
+      "Coronary artery disease",
+      "Chronic kidney disease stage 3"
+    ],
+    previousSurgeries: [
+      "Coronary artery bypass graft (2018)",
+      "Pacemaker implantation (2021)",
+      "Cataract surgery (2022)"
+    ],
+    diagnosis: "Acute decompensated heart failure",
+    treatment: [
+      "Furosemide IV 40mg now, then 40mg oral daily",
+      "ACE inhibitor optimization",
+      "Beta blocker continuation",
+      "Strict fluid restriction (1.5L daily)",
+      "Daily weight monitoring",
+      "Low sodium diet (<2g daily)",
+      "Cardiology follow-up in 1 week",
+      "Monitor renal function closely"
+    ]
+  },
+  {
+    symptoms: [
+      "Severe abdominal pain",
+      "Nausea and vomiting",
+      "Fever with chills",
+      "Yellowing of skin",
+      "Dark urine",
+      "Clay-colored stools"
+    ],
+    chronicIllnesses: [
+      "Gallstones",
+      "Hyperlipidemia",
+      "Obesity"
+    ],
+    previousSurgeries: [
+      "Appendectomy (2008)",
+      "Hysterectomy (2015)",
+      "Breast biopsy (2020)"
+    ],
+    diagnosis: "Acute cholecystitis with choledocholithiasis",
+    treatment: [
+      "NPO (nothing by mouth)",
+      "IV fluids and antibiotics",
+      "Pain management with opioids",
+      "Surgical consultation for cholecystectomy",
+      "ERCP for stone extraction if indicated",
+      "Liquid diet post-procedure",
+      "Low-fat diet long-term"
+    ]
+  },
+  {
+    symptoms: [
+      "Rash on face and arms",
+      "Joint pain and swelling",
+      "Fatigue",
+      "Fever",
+      "Hair loss",
+      "Photosensitivity",
+      "Mouth ulcers"
+    ],
+    chronicIllnesses: [
+      "Systemic Lupus Erythematosus (diagnosed 2017)",
+      "Lupus nephritis",
+      "Antiphospholipid syndrome"
+    ],
+    previousSurgeries: [
+      "Kidney biopsy (2018)",
+      "Cataract surgery (2020)",
+      "Joint aspiration (multiple)"
+    ],
+    diagnosis: "Lupus flare with cutaneous and articular involvement",
+    treatment: [
+      "Hydroxychloroquine 400mg daily",
+      "Prednisone 30mg daily, taper over 8 weeks",
+      "Mycophenolate mofetil 1000mg twice daily",
+      "Sun protection daily",
+      "Regular rheumatology monitoring",
+      "Avoid triggers (stress, infections, sun exposure)",
+      "Follow up in 2 weeks"
+    ]
+  },
+  {
+    symptoms: [
+      "Cough for 3 weeks",
+      "Night sweats",
+      "Weight loss",
+      "Fatigue",
+      "Low-grade fever",
+      "Chest pain",
+      "Shortness of breath"
+    ],
+    chronicIllnesses: [
+      "HIV positive (diagnosed 2019)",
+      "Latent tuberculosis",
+      "Chronic hepatitis B"
+    ],
+    previousSurgeries: [
+      "Lymph node biopsy (2020)",
+      "Dental surgery (2021)",
+      "Minor skin procedure (2022)"
+    ],
+    diagnosis: "Active pulmonary tuberculosis",
+    treatment: [
+      "Rifampin 600mg daily",
+      "Isoniazid 300mg daily",
+      "Pyrazinamide 1500mg daily",
+      "Ethambutol 1200mg daily",
+      "Directly observed therapy",
+      "Respiratory isolation initially",
+      "Nutritional support",
+      "Public health notification",
+      "Monthly follow-up for medication monitoring"
+    ]
+  }
+];
