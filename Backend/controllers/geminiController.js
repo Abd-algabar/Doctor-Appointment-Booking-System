@@ -3,94 +3,92 @@ import fs from "fs";
 import path from "path";
 import { json } from "stream/consumers";
 const Api = process.env.GEMINI_API_KEY;
+import MedicalRecord from "../models/MedicalRecord.js";
+import userModel from "../models/userModel.js";
 const ai = new GoogleGenAI({ Api });
 
 export const PatientDiagnosis = async (req, res) => {
   try {
     const { symptoms, Chronic_illnesses_or_previous_surgeries } = req.body;
 
-    if (!symptoms ) {
-      res.json({success:false,message:"symptoms is required"})
+    if (!symptoms) {
+      res.json({ success: false, message: "symptoms is required" });
     }
     const images = req.files;
 
     const imageParts = [];
     if (images) {
-            for (let i = 0; i < Math.min(images.length, 10); i++) {
-   
-      try {
-        const image = images[i];
+      for (let i = 0; i < Math.min(images.length, 10); i++) {
+        try {
+          const image = images[i];
 
+          // قراءة الصورة كـ base64
+          const imageBuffer = fs.readFileSync(image.path);
+          const base64Image = imageBuffer.toString("base64");
+          // console.log("base64Image: "+base64Image)
 
-        // قراءة الصورة كـ base64
-        const imageBuffer = fs.readFileSync(image.path);
-        const base64Image = imageBuffer.toString("base64");
-        // console.log("base64Image: "+base64Image)
+          // تحديد نوع الملف
+          // const mimeType = image[i].getMimeType(image.originalname);
 
-        // تحديد نوع الملف
-        // const mimeType = image[i].getMimeType(image.originalname);
+          imageParts.push({
+            inlineData: {
+              data: base64Image,
+              mimeType: "image/jpg",
+            },
+          });
 
-        imageParts.push({
-          inlineData: {
-            data: base64Image,
-            mimeType: "image/jpg",
-          },
-        });
-
-        // حذف الملف المؤقت إذا كنت تستخدم multer
-        fs.unlinkSync(image.path);
-      } catch (error) {
-        console.error(`Error processing image ${i}:`, error);
+          // حذف الملف المؤقت إذا كنت تستخدم multer
+          fs.unlinkSync(image.path);
+        } catch (error) {
+          console.error(`Error processing image ${i}:`, error);
+        }
       }
     }
-    }
-
-
 
     // const  models= ai.getGenerativeModel({model: "gemini-3-flash-preview"})
-    
-//     const prompt= `You are a medical consultant AI for physicians. Provide concise, high-precision analysis.
 
-// PATIENT DATA:
-// - Symptoms: ${symptoms}
-// - Medical History: ${Chronic_illnesses_or_previous_surgeries}
-// - Medical Images: ${imageParts.length} provided
+    //     const prompt= `You are a medical consultant AI for physicians. Provide concise, high-precision analysis.
 
-// RESPONSE FORMAT - THREE SECTIONS ONLY:
+    // PATIENT DATA:
+    // - Symptoms: ${symptoms}
+    // - Medical History: ${Chronic_illnesses_or_previous_surgeries}
+    // - Medical Images: ${imageParts.length} provided
 
-// 1. PRIMARY DIAGNOSIS:
-// [Exact medical condition name]
-// [ICD-10 code if applicable]
-// [Confidence level: High/Moderate/Low]
-// [Key supporting evidence]
+    // RESPONSE FORMAT - THREE SECTIONS ONLY:
 
-// 2. TREATMENT & PRESCRIPTION:
-// MEDICATIONS (Exact doses):
-// 1. [Drug Name] [Dose] [Route] [Frequency] [Duration]
-//    - Indication: [Specific use]
-//    - Example: Amoxicillin 500mg PO TID × 7 days for bacterial infection
+    // 1. PRIMARY DIAGNOSIS:
+    // [Exact medical condition name]
+    // [ICD-10 code if applicable]
+    // [Confidence level: High/Moderate/Low]
+    // [Key supporting evidence]
 
-// 2. [Drug Name] [Dose] [Route] [Frequency] [Duration]
-//    - Special instructions: [With food, avoid alcohol, etc.]
+    // 2. TREATMENT & PRESCRIPTION:
+    // MEDICATIONS (Exact doses):
+    // 1. [Drug Name] [Dose] [Route] [Frequency] [Duration]
+    //    - Indication: [Specific use]
+    //    - Example: Amoxicillin 500mg PO TID × 7 days for bacterial infection
 
-// PROCEDURES/THERAPIES:
-// - [Specific intervention]
-// - [Frequency/Duration]
+    // 2. [Drug Name] [Dose] [Route] [Frequency] [Duration]
+    //    - Special instructions: [With food, avoid alcohol, etc.]
 
-// FOLLOW-UP: [Timing] for [Specific assessment]
+    // PROCEDURES/THERAPIES:
+    // - [Specific intervention]
+    // - [Frequency/Duration]
 
-// 3. IMAGE/LAB ANALYSIS (If abnormalities found):
-// For each abnormal finding:
-// - [Image type]: [Specific finding]
-// - [Measurement]: [Exact value with reference range]
-// - [Clinical significance]: [Brief interpretation]
-// - [Recommendation]: [Further action if needed]
+    // FOLLOW-UP: [Timing] for [Specific assessment]
 
-// If all images/labs normal: "All provided images/labs within normal limits."
+    // 3. IMAGE/LAB ANALYSIS (If abnormalities found):
+    // For each abnormal finding:
+    // - [Image type]: [Specific finding]
+    // - [Measurement]: [Exact value with reference range]
+    // - [Clinical significance]: [Brief interpretation]
+    // - [Recommendation]: [Further action if needed]
 
-// CRITICAL: Be precise, concise, evidence-based. Maximum 300 words total. Use medical abbreviations. No explanations unless abnormal findings.`
+    // If all images/labs normal: "All provided images/labs within normal limits."
 
-const prompt=`You are a Clinical Decision Support AI assisting licensed physicians (NOT a replacement for clinical judgment).
+    // CRITICAL: Be precise, concise, evidence-based. Maximum 300 words total. Use medical abbreviations. No explanations unless abnormal findings.`
+
+    const prompt = `You are a Clinical Decision Support AI assisting licensed physicians (NOT a replacement for clinical judgment).
 
 Analyze the case and return ONLY a valid JSON object (no text before or after, no explanations).
 
@@ -159,22 +157,129 @@ RULES:
 - Do not include null fields; omit them if not applicable
 - Probabilities must be numeric (0–100)
 - Ensure JSON is parsable (no trailing commas)
-- No markdown, no comments, no extra text`
+- No markdown, no comments, no extra text`;
     const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents:createUserContent([
-            prompt,
-            ...imageParts
-        ])
+      model: "gemini-3-flash-preview",
+      contents: createUserContent([prompt, ...imageParts]),
     });
 
-    const AiData=JSON.parse(response.text);
-    res.json({ success:true, AiData})
+    const AiData = JSON.parse(response.text);
+    res.json({ success: true, AiData });
 
     // console.log(response.text);
   } catch (error) {
     console.log("error in  PatientDiagnosis" + error.message);
-     console.log("error in  PatientDiagnosis" + error);
-     res.json({ success:false, message:error.message })
+    console.log("error in  PatientDiagnosis" + error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
+export const CreateMedicalReport = async (req, res) => {
+  try {
+    const patient_id = req.body.patient_id;
+    console.log("patient_id :" + patient_id);
+
+    if (!patient_id) {
+      return res.json({ success: false, message: "patient_id is required" });
+    }
+    const user = await userModel.findById(patient_id);
+    if (!user) {
+      return res.json({ success: false, message: "patient not found" });
+    }
+
+    const records = await MedicalRecord.find({ userId: patient_id })
+  .populate("appointmentId", "slotDate slotTime")
+  .populate("docId", "name image")
+      .sort({ createdAt: 1 })
+      
+    if (!records || records.length === 0) {
+      return res.json({
+        success: false,
+        message: "No medical record found for this patient",
+      });
+    }
+
+    const formattedTimeline = records.map((item) => ({
+      date: item.appointmentId.slotDate,
+      symptoms: item.symptoms,
+      diagnosis: item.diagnosis,
+      treatment: item.treatment,
+      doctor: item.docId.name,
+    }));
+
+    const prompt=`You are a Clinical Decision Support AI assisting physicians.
+
+Analyze the patient's full medical timeline and generate a structured, professional medical report in Arabic.
+
+DATA:
+- Timeline length: ${formattedTimeline.length} visits
+- Patient Timeline: ${JSON.stringify(formattedTimeline)}
+- Chronic Conditions: ${records[0].Chronic_illnesses_or_previous_surgeries|| "None"}
+
+OBJECTIVES:
+- Identify patterns over time
+- Evaluate disease progression
+- Assess treatment effectiveness
+- Highlight risks and red flags
+- Help a new physician quickly understand the patient
+
+IMPORTANT:
+- Do NOT give absolute diagnosis
+- Use clinical reasoning
+- Be concise but informative
+- Max 500 words
+
+OUTPUT FORMAT (JSON ONLY):
+
+{
+  "summary": "ملخص شامل لحالة المريض",
+
+  "clinicalCourse": {
+    "pattern": "تحسن | تدهور | متكرر | مستقر",
+    "analysis": "تحليل تطور الحالة عبر الزمن"
+  },
+
+  "keyProblems": [
+    "أهم المشاكل الصحية الحالية"
+  ],
+
+  "treatmentEffectiveness": {
+    "response": "جيد | متوسط | ضعيف",
+    "notes": "هل العلاجات السابقة كانت فعالة"
+  },
+
+  "riskAssessment": {
+    "level": "منخفض | متوسط | عالي",
+    "reasons": ["أسباب الخطورة"],
+    "redFlags": ["علامات تحذيرية"]
+  },
+
+  "recommendations": {
+    "nextSteps": ["خطوات مقترحة للطبيب"],
+    "tests": ["تحاليل أو فحوصات"],
+    "lifestyle": ["نصائح للمريض"]
+  },
+
+  "patientFriendlySummary": "شرح مبسط يفهمه المريض عن حالته الصحية"
+}`
+
+
+ const response = await ai.models.generateContent({
+      model: "gemini-3-flash-preview",
+      contents: createUserContent([prompt]),
+    });
+
+    const AiData = JSON.parse(response.text);
+
+    console.log("AiData :" + JSON.stringify(AiData));
+    res.json({ success: true, AiData });
+
+    // console.log("prompt :" + prompt);
+
+    // res.json({ success: true, prompt: prompt });
+  } catch (error) {
+    console.log("error in  CreateMedicalReport" + error.message);
+    console.log("error in  CreateMedicalReport" + error);
+    res.json({ success: false, message: error.message });
   }
 };
