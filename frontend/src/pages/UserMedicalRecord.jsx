@@ -6,12 +6,13 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import CancelLoadingSpinner from "../components/UI/CancelLoadingSpinner";
 import { AppContext } from "../context/AppContext";
+import { useNavigate } from "react-router-dom";
 const UserMedicalRecord = () => {
   const [userMedicalRecord, setUserMedicalRecord] = useState([]);
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(true);
   const { token, backendUrl } = useContext(AppContext);
-
+  const navigate = useNavigate();
   const { id } = useParams();
   const calculateAge = (dob) => {
     const today = new Date();
@@ -73,7 +74,7 @@ const UserMedicalRecord = () => {
               </div>
             </div>
 
-            <button className=" mt-3 md:mt-0 text-sm hover:bg-[#5f6fff] px-4 py-2 hover:text-white rounded-xl text-[#5f6fff] bg-white transition-all duration-500 border border-[#5f6fff]">
+            <button onClick={() => navigate(`/medical-report/${id}`)} className=" mt-3 md:mt-0 text-sm hover:bg-[#5f6fff] px-4 py-2 hover:text-white rounded-xl text-[#5f6fff] bg-white transition-all duration-500 border border-[#5f6fff]">
               Generate medical report AI
             </button>
           </div>

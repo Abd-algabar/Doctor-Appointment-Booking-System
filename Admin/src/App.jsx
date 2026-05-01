@@ -17,6 +17,7 @@ import DoctorProfile from './pages/Doctor/DoctorProfile';
 import UserMedicalRecord from './pages/UserMedicalRecord';
 import AllPatients from './pages/Admin/AllPatients';
 import Statistics from './pages/Admin/Statistics';
+import MedicalReport from './pages/MedicalReport';
 const App = () => {
   const {aToken}=useContext(AdminContext);
   const {dToken}=useContext(DoctorContext);
@@ -40,6 +41,8 @@ const App = () => {
               <Route path='/doctor-appointments' element={<DoctorAppointments/>} />
               <Route path='/doctor-dashboard' element={<DoctorDashboard/>} />
               <Route path='/user-medical-record/:id' element={<UserMedicalRecord/>}/> 
+
+            <Route path='/medical-report/:id' element={<MedicalReport/>} /> 
           </Routes>
         </div>
       <ToastContainer  />

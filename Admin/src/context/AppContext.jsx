@@ -14,7 +14,8 @@ const AppContextProvider = ({ children }) => {
   }
   const value = {
    calculateAge,
-   currency
+   currency,
+   backendUrl:import.meta.env.VITE_BACKEND_URL
   };
 
   return (

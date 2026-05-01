@@ -14,6 +14,7 @@ import MyAppointments from './pages/MyAppointments.jsx';
  import { useContext } from 'react';
  import { AppContext } from './context/AppContext.jsx';
 import UserMedicalRecord from './pages/UserMedicalRecord.jsx';
+import MedicalReport from './pages/MedicalReport.jsx';
 const App = () => {
 
     const {token}=useContext(AppContext);
@@ -32,6 +33,7 @@ const App = () => {
         <Route path='/my-appointments' element={token ? <MyAppointments /> : <Login />} />
         <Route path='/appointments/:docId' element={<Appointments />} />
         <Route path='/user-medical-record/:id' element={<UserMedicalRecord />} />
+        <Route path='/medical-report/:id' element={<MedicalReport/>} /> 
       </Routes>
       <Footer/>
     </div>

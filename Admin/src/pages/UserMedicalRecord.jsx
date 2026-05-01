@@ -1,6 +1,7 @@
 import React from "react";
 import { assets } from "../assets/assets_admin/assets";
 import { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import { DoctorContext } from "../context/DoctorContext";
 import { useParams } from "react-router-dom";
@@ -17,6 +18,7 @@ const UserMedicalRecord = () => {
   const{aToken}=useContext(AdminContext)
   const { id } = useParams();
 
+  const navigate = useNavigate();
   const getUserMedicalRecord = async () => {
     try {
       const { data } = await axios.get(
@@ -72,7 +74,7 @@ const UserMedicalRecord = () => {
               </div>
             </div>
 
-            <button className=" mt-3 md:mt-0 text-sm hover:bg-[#5f6fff] px-4 py-2 hover:text-white rounded-xl text-[#5f6fff] bg-white transition-all duration-500 border border-[#5f6fff]">Generate medical report AI</button>
+            <button onClick={() => navigate(`/medical-report/${id}`)} className=" mt-3 md:mt-0 text-sm hover:bg-[#5f6fff] px-4 py-2 hover:text-white rounded-xl text-[#5f6fff] bg-white transition-all duration-500 border border-[#5f6fff]">Generate medical report AI</button>
           </div>
         )}
       </div>

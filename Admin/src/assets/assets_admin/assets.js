@@ -13,7 +13,9 @@ import earning_icon from './earning_icon.svg'
 import patients_icon from './patients_icon.svg'
 import cross_icon from './cross_icon.png'
 import statistics_icon from './statistics.svg'
-
+import like from './like-svgrepo-com.svg'
+import note from "./agenda-svgrepo-com.svg"
+import risk from "./warning-svgrepo-com.svg"
 export const assets = {
     add_icon,
     admin_logo,
@@ -29,5 +31,8 @@ export const assets = {
     appointments_icon,
     earning_icon,
     cross_icon,
-    statistics_icon
+    statistics_icon,
+    like,
+    note,
+    risk
 }
